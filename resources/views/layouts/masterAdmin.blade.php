@@ -11,10 +11,16 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/material-icons-min.css') }}" />
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/428a5eeb6e.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <div id="app">
@@ -67,23 +73,9 @@
                 </div>
             </div>
         </nav>
-
+        @include('admin-navbar')
         <div class="container">
-            <nav class="navbar navbar-default" style="background-color: #F2C374">
-                <div class="container-fluid">
-                    <ul class="nav navbar-nav">
-                    <li><a href= "{{ route('admin.dashboard') }}">Dashboard</a>
-                    <!-- <li><a href="# }}">View All Tech</a></li> -->
-                    <li><a href= "{{ route('admin.dashboard') }}">Manage Users</a>
-                    <li><a href= "#">Inventory</a>
-                    <li><a href="#">Report</a></li>
-                    </ul>
-                </div>
-            </nav>
-            {{-- @include('partials.errors')
-            @include('partials.success') --}}
-
-            <div class="row">
+            <div class="jumbotron jumbotron-fluid">
                 @yield('content')
             </div>
         </div>

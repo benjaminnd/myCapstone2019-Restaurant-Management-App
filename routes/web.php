@@ -14,12 +14,16 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
 Auth::routes();
+Route::resource('users', 'UserController');
+Route::resource('inventories', 'InventoryController');
+Route::resource('menuItems', 'MenuItemController');
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/users/logout', 'Auth\LoginController@userLogout')->name('user.logout');
-
+Route::get('menuautocomplete', 'MenuItemController@searchAjax')->name('menuautocomplete');
+Route::get('userautocomplete', 'UserController@searchAjax')->name('userautocomplete');
+Route::get('inventoryautocomplete', 'InventoryController@searchAjax')->name('inventoriesautocomplete');
 Route::prefix('admin')->group(function(){
     Route::get('/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
     Route::post('/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
@@ -31,5 +35,17 @@ Route::prefix('admin')->group(function(){
     Route::get('/password/reset', 'Auth\AdminForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
     Route::post('/password/reset', 'Auth\AdminResetPasswordController@reset');
     Route::get('/password/reset/{token}', 'Auth\AdminResetPasswordController@showResetForm')->name('admin.password.reset');
+
+    //User Management
+    Route::get('/users', 'UserController@index')->name('admin.manageUsers');
+    Route::get('/search', 'UserController@search')->name('admin.searchUsers');   
     
+    //Inventory Management
+    Route::get('/inventories', 'InventoryController@index')->name('admin.manageInventories');
+    Route::get('/inventories/search', 'InventoryController@search')->name('admin.searchInventories');   
+    
+    //Menu Management
+    Route::get('/menu/{var1}/{var2}', 'MenuItemController@index')->name('admin.manageMenu');
+    Route::get('/menu/search', 'MenuItemController@search')->name('admin.searchMenu');   
+    Route::get('/menu/filter/{var}/{var1}/{var2}', 'MenuItemController@filter')->name('admin.filterMenu');   
 });

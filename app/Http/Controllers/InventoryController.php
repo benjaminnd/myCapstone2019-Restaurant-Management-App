@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use App\User;
+use App\Inventory;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-class UserController extends Controller
+class InventoryController extends Controller
 {
     public function __construct()
     {
@@ -21,8 +21,8 @@ class UserController extends Controller
     public function index()
     {
         //
-        $usersList = DB::table('users')->paginate(5);
-        return view('users', ['users' => $usersList]);
+        $inventoriesList = DB::table('inventories')->paginate(5);
+        return view('inventories.index', ['inventories' => $inventoriesList]);
     }
     /**
      * Show the form for creating a new resource.
@@ -32,18 +32,18 @@ class UserController extends Controller
     public function create()
     {
         //
-        return view('users.create');
+        return view('inventories.create');
     }
 
     public function search(Request $request){
         $search = $request->get('search');
-        $users = DB::table('users')->where('name', 'ilike', '%'.$search.'%')->paginate(3);
-        return view('users', ['users' => $users, 'searching' => true]);
+        $inventories = DB::table('inventories')->where('name', 'ilike', '%'.$search.'%')->paginate(3);
+        return view('inventories.index', ['inventories' => $inventories, 'searching' => true]);
     }
 
     public function searchAjax(Request $request){
         $search = $request->get('search');
-        $result = DB::table('users')->where('name', 'ilike', '%'.$search.'%')->get();
+        $result = DB::table('inventories')->where('name', 'ilike', '%'.$search.'%')->get();
         return response()->json($result);
     }
 
@@ -55,49 +55,50 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = new User;
+        $inventory = new Inventory;
         $this->validate($request,[
                 'name'=>'required',
-                'email'=>'required|unique:users|unique:admins',
-                'password'=>'required|string|min:5',
+                'supplier_id'=>'required|exists:suppliers,id',
             ]);
-        $user->name= $request->name;
-        $user->email= $request->email;
-        $user->password = $request->password;
-        if($user->save()){
-            return redirect()->route('admin.manageUsers')
-            ->with('success' , 'User added successfully');
+        $inventory->name= $request->name;
+        $inventory->price= $request->price;
+        $inventory->quantity = $request->quantity;
+        $inventory->supplier_id = $request->supplier_id;
+        $inventory->imported_date = $request->imported_date;
+        if($inventory->save()){
+            return redirect()->route('admin.manageInventories')
+            ->with('success' , 'Inventory added successfully');
         }
         return back()->withInput()->with('errors' , $validator->messages());
     }
     /**
      * Display the specified resource.
      *
-     * @param  \App\User  $user
+     * @param  \App\Inventory  $inventory
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(Inventory $inventory)
     {
         //
-        $singleUser = User::find($user->id);
-        return view('users.show', ['singleUserData' => $singleUser]);
+        $inventory = Inventory::find($inventory->id);
+        return view('inventories.show', ['inventory' => $inventory]);
     }
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\User  $user
+     * @param  \App\Inventory  $inventory
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $editUser = User::find($id);
-        return view('users.edit', ['user'=>$editUser]);
+        $editInventory = Inventory::find($id);
+        return view('inventories.edit', ['inventory'=>$editInventory]);
     }
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
+     * @param  \App\Inventory  $inventory
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -106,7 +107,7 @@ class UserController extends Controller
         // Validator::make($data, [
         //     'name' => ['required'],
         //     'email' => ['required',
-        //                 Rule::unique('users')->ignore($id),
+        //                 Rule::unique('Inventorys')->ignore($id),
         //                 Rule::unique('admins')],
         //     'password'=> ['required',
         //                   'string',
@@ -115,36 +116,38 @@ class UserController extends Controller
         // ]);
         // $this->validate($request,[
         //     'name'=>'required',
-        //     'email'=>'required|unique:users|unique:admins',
+        //     'email'=>'required|unique:Inventorys|unique:admins',
         //     'password'=>'required|string|min:5',
         // ]);
         // save data 
-        $userUpdate = User::where('id', $id)-> update([
+        $inventoryUpdate = Inventory::where('id', $id)-> update([
             'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => $request->input('password'),
+            'price' => $request->input('price'),
+            'quantity' => $request->input('quantity'),
+            'supplier_id' => $request->input('supplier_id'),
+            'imported_date' => $request->input('imported_date'),
         ]);
-        if($userUpdate){
-            return redirect()->route('admin.manageUsers')
-            ->with('success', 'User data updated successfully');
+        if($inventoryUpdate){
+            return redirect()->route('admin.manageInventories')
+            ->with('success', 'Inventory updated successfully');
         }
-        return back()->withInput()->with('error' ,'Error updating user. Please try again.');
+        return back()->withInput()->with('error' ,'Error updating Item. Please try again.');
     }
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\User  $user
+     * @param  \App\Inventory  $inventory
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $user = User::find( $id);
-		if($user->delete()){
+        $inventory = Inventory::find( $id);
+		if($inventory->delete()){
             
             //redirect
-            return redirect()->route('admin.manageUsers')
-            ->with('success' , 'User deleted successfully');
+            return redirect()->route('admin.manageInventories')
+            ->with('success' , 'Item deleted successfully');
         }
-        return back()->withInput()->with('error' , 'User could not be deleted');
+        return back()->withInput()->with('error' , 'Item could not be deleted');
     }
 }
