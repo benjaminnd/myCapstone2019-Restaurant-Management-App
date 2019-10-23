@@ -1,5 +1,18 @@
 <?php
 
+$localurl = [
+    'host' => '127.0.0.1',
+    'username' => 'postgres',
+    'password' => '127.0.0.1',
+     'database' => 'mycapstone',
+];
+
+$url = parse_url(getenv("DATABASE_URL"));
+$host = $url["host"];
+$username = $url["user"];
+$password = $url["pass"];
+$database = substr($url["path"], 1);
+
 return [
 
     /*
@@ -12,6 +25,7 @@ return [
     | you may use many connections at once using the Database library.
     |
     */
+    
 
     'default' => env('DB_CONNECTION', 'pgsql'),
 
@@ -56,11 +70,11 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'host' => $host,
             'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'mycapstone'),
-            'username' => env('DB_USERNAME', 'postgres'),
-            'password' => env('DB_PASSWORD', 'truongdoan93'),
+            'database' => $database,
+            'username' => $username,
+            'password' => $password,
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
