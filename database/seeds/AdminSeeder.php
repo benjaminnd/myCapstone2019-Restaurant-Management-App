@@ -14,7 +14,6 @@ class AdminSeeder extends Seeder
         DB::table('admins')->insert([
           'name' => 'Minh Dang',
           'email' => 'minh.chef@restaurant.ca',
-          'username' => 'chef.minh',
           'password' => bcrypt('12345')
       ]);
     }
