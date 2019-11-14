@@ -22,7 +22,7 @@ class UserController extends Controller
     public function index()
     {
         //
-        $usersList = DB::table('users')->paginate(5);
+        $usersList = DB::table('users')->orderBy('name')->paginate(5);
         return view('users', ['users' => $usersList]);
     }
     /**
@@ -38,13 +38,13 @@ class UserController extends Controller
 
     public function search(Request $request){
         $search = $request->get('search');
-        $users = DB::table('users')->where('name', 'ilike', '%'.$search.'%')->paginate(3);
+        $users = DB::table('users')->where('name', 'ilike', '%'.$search.'%')->orderBy('name')->paginate(3);
         return view('users', ['users' => $users, 'searching' => true]);
     }
 
     public function searchAjax(Request $request){
         $search = $request->get('search');
-        $result = DB::table('users')->where('name', 'ilike', '%'.$search.'%')->get();
+        $result = DB::table('users')->where('name', 'ilike', '%'.$search.'%')->orderBy('name')->get();
         return response()->json($result);
     }
 

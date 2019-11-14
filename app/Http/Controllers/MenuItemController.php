@@ -19,32 +19,32 @@ class MenuItemController extends Controller
     public function index($showAll, $showFood)
     {
         if($showAll){
-            $menuItemList = DB::table('menu_items')->groupBy('id','type')->orderBy('name')->paginate(5);
+            $menuItemList = DB::table('menu_items')->groupBy('id','type')->orderBy('name')->orderBy('type')->paginate(5);
             return view('menu.index', ['menu_items' => $menuItemList,'showAll'=>$showAll,'showFood' => $showFood]);
         }elseif($showFood){
-            $menuItemList = DB::table('menu_items')->where('type', '<>', 'drink')->paginate(5);
+            $menuItemList = DB::table('menu_items')->where('type', '<>', 'drink')->orderBy('name')->paginate(5);
             return view('menu.index', ['menu_items' => $menuItemList,'showAll'=>$showAll,'showFood' => $showFood]);
         }else{
-            $menuItemList = DB::table('menu_items')->where('type', 'drink')->paginate(5);
+            $menuItemList = DB::table('menu_items')->where('type', 'drink')->orderBy('name')->paginate(5);
             return view('menu.index', ['menu_items' => $menuItemList,'showAll'=>$showAll,'showFood' => $showFood]);
         }
     }
 
     public function filter($tag, $showAll, $showFood)
     {
-            $menuItemList = DB::table('menu_items')->where('tags', 'ilike', '%'.$tag.'%' )->paginate(5);
+            $menuItemList = DB::table('menu_items')->where('tags', 'ilike', '%'.$tag.'%' )->orderBy('name')->paginate(5);
             return view('menu.index', ['menu_items' => $menuItemList,'showAll'=>$showAll,'showFood' => $showFood, 'searching' => 1]);
     }
 
     public function search(Request $request){
         $search = $request->get('search');
-        $result = DB::table('menu_items')->where('name', 'ilike', '%'.$search.'%')->paginate(3);
+        $result = DB::table('menu_items')->where('name', 'ilike', '%'.$search.'%')->orderBy('name')->paginate(3);
         return view('menu.index', ['menu_items' => $result, 'showAll'=>'1', 'showFood' => '0', 'searching' => true]);
     }
 
     public function searchAjax(Request $request){
         $search = $request->get('search');
-        $result = DB::table('menu_items')->where('name', 'ilike', '%'.$search.'%')->get();
+        $result = DB::table('menu_items')->where('name', 'ilike', '%'.$search.'%')->orderBy('name')->get();
         return response()->json($result);
     }
 

@@ -19,7 +19,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $transactions = DB::table('transactions')->paginate(5);
+        $transactions = DB::table('transactions')->orderBy('date', 'desc')->paginate(5);
         $menuitems = DB::table('menu_items')->get()->toArray();
         return view('transactions.index', ['transactions' => $transactions, 'menu_items' => $menuitems]);
     }

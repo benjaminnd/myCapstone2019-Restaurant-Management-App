@@ -22,7 +22,7 @@ class InventoryController extends Controller
     public function index()
     {
         //
-        $inventoriesList = DB::table('inventories')->paginate(5);
+        $inventoriesList = DB::table('inventories')->orderBy('name')->paginate(5);
         return view('inventories.index', ['inventories' => $inventoriesList]);
     }
     /**
@@ -38,13 +38,13 @@ class InventoryController extends Controller
 
     public function search(Request $request){
         $search = $request->get('search');
-        $inventories = DB::table('inventories')->where('name', 'ilike', '%'.$search.'%')->paginate(3);
+        $inventories = DB::table('inventories')->where('name', 'ilike', '%'.$search.'%')->orderBy('name')->paginate(3);
         return view('inventories.index', ['inventories' => $inventories, 'searching' => true]);
     }
 
     public function searchAjax(Request $request){
         $search = $request->get('search');
-        $result = DB::table('inventories')->where('name', 'ilike', '%'.$search.'%')->get();
+        $result = DB::table('inventories')->where('name', 'ilike', '%'.$search.'%')->orderBy('name')->get();
         return response()->json($result);
     }
 
