@@ -91,8 +91,8 @@
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href={{ route('admin.filterMenu', ['tag'=>'spicy', 'showAll'=>$showAll, 'showFood' => $showFood]) }}><i class="fas fa-pepper-hot"></i>Spicy</a></li>
-                            <li><a href={{ route('admin.filterMenu', ['tag'=>'halal', 'showAll'=>$showAll, 'showFood' => $showFood]) }}></i>Halal</a></li>
-                            <li><a href={{ route('admin.filterMenu', ['tag'=>'seafood', 'showAll'=>$showAll, 'showFood' => $showFood]) }}></i>Seafood</a></li>
+                            <li><a href={{ route('admin.filterMenu', ['tag'=>'halal', 'showAll'=>$showAll, 'showFood' => $showFood]) }}><i class="fas fa-mosque"></i>Halal</a></li>
+                            <li><a href={{ route('admin.filterMenu', ['tag'=>'seafood', 'showAll'=>$showAll, 'showFood' => $showFood]) }}><i class="fa fa-fish"></i>Seafood</a></li>
                             <li><a href={{ route('admin.filterMenu', ['tag'=>'vegan', 'showAll'=>$showAll, 'showFood' => $showFood]) }}><i class="fas fa-leaf"></i>Vegan</a></li>
                             <li><a href={{ route('admin.filterMenu', ['tag'=>'vietnamese', 'showAll'=>$showAll, 'showFood' => $showFood]) }}><i class="fas fa-flag"></i>Vietnamese</a></li>
                             <li><a href={{ route('admin.filterMenu', ['tag'=>'chinese', 'showAll'=>$showAll, 'showFood' => $showFood]) }}><i class="fas fa-yin-yang"></i>Chinese</a></li>
