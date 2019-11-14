@@ -1,0 +1,1 @@
+@extends(Auth::guard('admin')->check() ? 'layouts.masterAdmin' : 'layouts.app')

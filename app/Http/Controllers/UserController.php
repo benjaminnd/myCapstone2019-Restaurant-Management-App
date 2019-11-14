@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\User;
@@ -63,7 +64,7 @@ class UserController extends Controller
             ]);
         $user->name= $request->name;
         $user->email= $request->email;
-        $user->password = $request->password;
+        $user->password = Hash::make($request->password);
         if($user->save()){
             return redirect()->route('admin.manageUsers')
             ->with('success' , 'User added successfully');
@@ -122,7 +123,7 @@ class UserController extends Controller
         $userUpdate = User::where('id', $id)-> update([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
-            'password' => $request->input('password'),
+            'password' => Hash::make($request->input('password')),
         ]);
         if($userUpdate){
             return redirect()->route('admin.manageUsers')

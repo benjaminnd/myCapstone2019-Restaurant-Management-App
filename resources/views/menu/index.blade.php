@@ -1,4 +1,4 @@
-@extends('layouts.masterAdmin')
+@extends(Auth::guard('admin')->check() ? 'layouts.masterAdmin' : 'layouts.app')
 
 @section('content')
 @include('successMessage')
@@ -44,13 +44,13 @@
                         <input type="number" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" class="form-control" id="price" name="price" value="{{ old('price') }}"/>
                     </div>
                     <div class="form-group">
-                        <label for="quantity">Item Description</label>
-                        <input type="text" class="form-control" id="quantity" name="quantity" value="{{ old('quantity') }}">
+                        <label for="item_description">Item Description</label>
+                        <input type="text" class="form-control" id="item_description" name="item_description" value="{{ old('quantity') }}">
                     </div>
                     <div class="form-group">
                         <label for="type" style="margin-right: 50px;">Type</label>
-                        <label class="radio-inline"><input type="radio" name="type">Food</label>
-                        <label class="radio-inline"><input type="radio" name="type">Drink</label>
+                        <label class="radio-inline"><input type="radio" name="type" value="food">Food</label>
+                        <label class="radio-inline"><input type="radio" name="type" value="drink">Drink</label>
                     </div>
                     <div class="form-group">
                         <label for="tags" style="margin-right: 15px;">Filter tags</label>
@@ -64,21 +64,23 @@
                 </div>
                 <div class="form-row">
                     {{ csrf_field() }} 
-                    <button type="submit" class="btn btn-success" style="margin-bottom: 50px;">Add Inventory</button>
-                    <a id="closeBtn" class="btn btn-warning" style="margin-bottom: 50px;" href="/admin/menu">Close</a>
+                    <button type="submit" class="btn btn-success" style="margin-bottom: 50px;">Add</button>
+                    <a id="closeBtn" class="btn btn-warning" style="margin-bottom: 50px;" href={{ route('admin.manageMenu', ['showAll'=>$showAll, 'showFood' => $showFood]) }}>Close</a>
                 </div>
             </form>
         </table>
     </div>
     <div class="row">
-        <ul class="nav nav-tabs" role="tablist">
+        <ul class="nav nav-tabs" role="tablist" style="margin-bottom: 15px;">
             <li class="{{$showAll ? 'active':''}}"><a href="/admin/menu/1/0">All</a></li>
             <li class="{{$showFood ? 'active':''}}"><a href="/admin/menu/0/1">Food</a></li>
             <li class="{{$showFood || $showAll ? '' : 'active'}}"><a href="/admin/menu/0/0">Drink</a></li>      
         </ul>
         <div class="table-responsive">
             <div class="col-md-2 col-md-offset-8 text-right">
+                @if(Auth::guard('admin')->check())
                     <a id="addBtn" class="btn" style="{{count($errors) > 0 ? 'display:none;' : ''}}" title="Add item"><i class="material-icons">add</i></a>
+                @endif
             </div>
             <table id="menuItemsTable" class="table table-hover">
                 <thead class="text-primary">
@@ -88,18 +90,19 @@
                         <a class="dropdown-toggle" data-toggle="dropdown">Filter
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/admin/menu/filter/spicy/{{$showAll}}/{{$showFood}}"><i class="fas fa-pepper-hot"></i>Spicy</a></li>
-                            <li><a href="/admin/menu/filter/halal/{{$showAll}}/{{$showFood}}"><i class="fas fa-mosque"></i>Halal</a></li>
-                            <li><a href="/admin/menu/filter/seafood/{{$showAll}}/{{$showFood}}"><i class="fas fa-fish"></i>Seafood</a></li>
-                            <li><a href="/admin/menu/filter/vegan/{{$showAll}}/{{$showFood}}"><i class="fas fa-leaf"></i>Vegan</a></li>
-                            <li><a href="/admin/menu/filter/vietnamese/{{$showAll}}/{{$showFood}}"><i class="fas fa-flag"></i>Vietnamese</a></li>
-                            <li><a href="/admin/menu/filter/chinese/{{$showAll}}/{{$showFood}}"><i class="fas fa-yin-yang"></i>Chinese</a></li>
-                            <li><a href="/admin/menu/filter/drink/{{$showAll}}/{{$showFood}}"><i class="fas fa-wine-glass"></i>Drinks</a></li>
+                            <li><a href={{ route('admin.filterMenu', ['tag'=>'spicy', 'showAll'=>$showAll, 'showFood' => $showFood]) }}><i class="fas fa-pepper-hot"></i>Spicy</a></li>
+                            <li><a href={{ route('admin.filterMenu', ['tag'=>'halal', 'showAll'=>$showAll, 'showFood' => $showFood]) }}></i>Halal</a></li>
+                            <li><a href={{ route('admin.filterMenu', ['tag'=>'seafood', 'showAll'=>$showAll, 'showFood' => $showFood]) }}></i>Seafood</a></li>
+                            <li><a href={{ route('admin.filterMenu', ['tag'=>'vegan', 'showAll'=>$showAll, 'showFood' => $showFood]) }}><i class="fas fa-leaf"></i>Vegan</a></li>
+                            <li><a href={{ route('admin.filterMenu', ['tag'=>'vietnamese', 'showAll'=>$showAll, 'showFood' => $showFood]) }}><i class="fas fa-flag"></i>Vietnamese</a></li>
+                            <li><a href={{ route('admin.filterMenu', ['tag'=>'chinese', 'showAll'=>$showAll, 'showFood' => $showFood]) }}><i class="fas fa-yin-yang"></i>Chinese</a></li>
+                            <li><a href={{ route('admin.filterMenu', ['tag'=>'drink', 'showAll'=>$showAll, 'showFood' => $showFood]) }}><i class="fas fa-wine-glass"></i>Drinks</a></li>
                         </ul>
                         @endif
                     </th>
                     <th>Name</th>
                     <th {{($showAll || $showFood) ? '' : 'hidden'}}>Description</th>
+                    <th {{($showAll || $showFood) ? '' : 'hidden'}}>Recipe</th>
                     <th>Price</th>
                 </thead>
                 <tbody>
@@ -140,23 +143,45 @@
                             </td>
                             <td>{{ $item->name }}</td>
                             <td {{($showAll || $showFood) ? '' : 'hidden'}}>{{ $item->item_description }}</td>
-                            <td>{{ $item->price }}</td>
-                            <td>
-                                <form action="{{'/menuItems/'.$item->id}}" onsubmit="return confirm('Do you really want to delete this menu item?')"  method="post">
-                                    <a href="{{ action('MenuItemController@edit', $item->id)}}" title="edit"><i class="material-icons md-18">edit</i></a>
-                                    {{csrf_field()}}
-                                    {{method_field('DELETE')}}
-                                    <button class="btn btn-link" title="delete"><i class="material-icons text-danger">delete</i></button>
-                                </form>
+                            <td {{($showAll || $showFood) ? '' : 'hidden'}}>
+                            <a class="btn btn-link showRecipe" data-id="{{$item->recipe_id}}" style="{{$item->type == 'drink' ? 'display:none' : ''}}"><i class="material-icons">menu_book</i></a>  
                             </td>
+                            <td>{{ $item->price }}</td>
+                            @if(Auth::guard('admin')->check())
+                                <td>
+                                    <form action="{{'/menuItems/'.$item->id}}" onsubmit="return confirm('Do you really want to delete this menu item?')"  method="post">
+                                        <a href="{{ action('MenuItemController@edit', $item->id)}}" title="edit"><i class="material-icons md-18">edit</i></a>
+                                        {{csrf_field()}}
+                                        {{method_field('DELETE')}}
+                                        <button class="btn btn-link" title="delete"><i class="material-icons text-danger">delete</i></button>
+                                    </form>
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>
             </table>
             @if(isset($searching))
-                <a id="clearBtn" href="/admin/menu/{{$showAll}}/{{$showFood}}">Clear Filter</a>
+                <a id="clearBtn" href="{{ route('admin.manageMenu', ['showAll'=> $showAll, 'showFood' =>$showFood])}}">Clear Filter</a>
             @endif
             {{$menu_items->links()}}
+        </div>
+    </div>
+</div>
+<div class="modal" tabindex="-1" id="recipeModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h4 class="modal-title"></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            <p id="recipeContent">Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
         </div>
     </div>
 </div>
@@ -167,7 +192,28 @@
             $('#addMenuItemsForm').show();
             $(this).hide();
         });
-
+        $('.showRecipe').click(function(){
+            var id = $(this).data("id");
+            $.ajax({
+                url: "{{route('showrecipe')}}",
+                data: {
+                    recipe_id: id 
+                },
+                dataType: "json",
+                success: function(data){
+                    $('#recipeModal').show();
+                    $('.modal-title').html(data[0].name)
+                    $('#recipeContent').html(data[0].description)
+                    console.log(data[0].description);
+                },
+                error: function(req, status, error) {
+                    console.log('Error');
+                }   
+            });
+        })
+        $('.close').click(function(){
+            $("#recipeModal").css("display", "none");
+        })
         $('#search').autocomplete({
             source:function(request, response){
                 $.ajax({

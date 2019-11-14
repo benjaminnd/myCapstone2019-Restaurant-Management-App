@@ -14,7 +14,7 @@
                     <input type="text" class="form-control" id="name" name="name"  value="{{ $item->name }}">
                 </div>
                 <div class="form-group">
-                    <label for="quantity">Recipe ID</label>
+                    <label for="recipe_id">Recipe ID</label>
                     <input type="number" class="form-control" id="recipe_id" name="recipe_id" value="{{ $item->recipe_id }}">
                 </div>
                 <div class="form-group">
@@ -22,13 +22,13 @@
                     <input type="number" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" class="form-control" id="price" name="price" value="{{ $item->price }}"/>
                 </div>
                 <div class="form-group">
-                    <label for="quantity">Item Description</label>
-                    <input type="text" class="form-control" id="quantity" name="quantity" value="{{ $item->item_description }}">
+                    <label for="item_description">Item Description</label>
+                    <input type="text" class="form-control" id="item_description" name="item_description" value="{{ $item->item_description }}">
                 </div>
                 <div class="form-group">
                     <label for="type" style="margin-right: 50px;">Type</label>
-                    <label class="radio-inline"><input type="radio" name="type" {{($item->type == 'food' ? 'checked' : '')}}>Food</label>
-                    <label class="radio-inline"><input type="radio" name="type" {{($item->type == 'drink' ? 'checked' : '')}}>Drink</label>
+                    <label class="radio-inline"><input type="radio" name="type"  value="food" {{($item->type == 'food' ? 'checked' : '')}}>Food</label>
+                    <label class="radio-inline"><input type="radio" name="type"  value="drink" {{($item->type == 'drink' ? 'checked' : '')}}>Drink</label>
                 </div>
                 <div class="form-group">
                     <label for="tags" style="margin-right: 15px;">Filter tags</label>

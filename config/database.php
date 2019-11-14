@@ -1,11 +1,11 @@
 <?php
 
-$localurl = [
-    'host' => '127.0.0.1',
-    'username' => 'postgres',
-    'password' => '127.0.0.1',
-     'database' => 'mycapstone',
-];
+// $localurl = [
+//     'host' => '127.0.0.1',
+//     'username' => 'postgres',
+//     'password' => '127.0.0.1',
+//      'database' => 'mycapstone',
+// ];
 
 $url = parse_url(getenv("DATABASE_URL"));
 $host = $url["host"];

@@ -9,7 +9,7 @@ class MenuItemController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admin');
+        //$this->middleware('auth:admin');
     }
     /**
      * Display a listing of the resource.
@@ -19,7 +19,7 @@ class MenuItemController extends Controller
     public function index($showAll, $showFood)
     {
         if($showAll){
-            $menuItemList = DB::table('menu_items')->paginate(5);
+            $menuItemList = DB::table('menu_items')->groupBy('id','type')->orderBy('name')->paginate(5);
             return view('menu.index', ['menu_items' => $menuItemList,'showAll'=>$showAll,'showFood' => $showFood]);
         }elseif($showFood){
             $menuItemList = DB::table('menu_items')->where('type', '<>', 'drink')->paginate(5);
@@ -47,6 +47,19 @@ class MenuItemController extends Controller
         $result = DB::table('menu_items')->where('name', 'ilike', '%'.$search.'%')->get();
         return response()->json($result);
     }
+
+    public function showRecipeAjax(Request $request){
+        $search = $request->get('recipe_id');
+        $result = DB::table('recipes')->where('id', $search)->get();
+        return response()->json($result);
+    }
+
+    public function showPriceAjax(Request $request){
+        $result = MenuItem::all('name', 'price');
+        return response()->json($result);
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -74,7 +87,7 @@ class MenuItemController extends Controller
         $item = new MenuItem;
         $this->validate($request,[
                 'name'=>'required|unique:menu_items',
-                'recipe_id'=>'exists:recipes|nullable',
+                'recipe_id'=>'exists:recipes,id|nullable',
                 'type'=>'required',
         ]);
         $item->name = $request->name;
@@ -83,13 +96,16 @@ class MenuItemController extends Controller
         $item->item_description = $request->item_description;
         $item->type = $request->type;
         $tags = "";
-        foreach($request->input('tags') as $tag){
-            $tags .= $tag . ", ";
+        if($request->input('tags')){
+            foreach($request->input('tags') as $tag){
+                $tags .= $tag . ", ";
+            }
         }
+        
         $item->tags = trim($tags, ', ');
         if($item->save()){
-            return redirect()->route('admin.manageMenu')
-            ->with('success' , 'Inventory added successfully');
+            return redirect()->route('admin.manageMenu', [1,0])
+            ->with('success', 'Inventory added successfully');
         }
         return back()->withInput()->with('errors' , $validator->messages());
     }
@@ -126,7 +142,29 @@ class MenuItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $tags = "";
+        if($request->input('tags')){
+            foreach($request->input('tags') as $tag){
+                $tags .= $tag . ", ";
+            }
+        }
+
+        
+        $menuitemUpdate = MenuItem::where('id', $id)-> update([
+            'name' => $request->input('name'),
+            'recipe_id' => $request->input('recipe_id'),
+            'price' => $request->input('price'),
+            'item_description' => $request->input('item_description'),
+            'type'=>$request->input('type'),
+            'tags' => $tags
+
+        ]);
+        if($menuitemUpdate){
+            return redirect()->route('admin.manageMenu', [1,0])
+            ->with('success', 'Menu item updated successfully');
+        }
+        return back()->withInput()->with('error' ,'Error updating Item. Please try again.');
     }
 
     /**
@@ -141,7 +179,7 @@ class MenuItemController extends Controller
 		if($item->delete()){
             
             //redirect
-            return redirect()->route('admin.manageMenu')
+            return redirect()->route('admin.manageMenu', [1,0])
             ->with('success' , 'Item deleted successfully');
         }
         return back()->withInput()->with('error' , 'Item could not be deleted');
