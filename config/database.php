@@ -1,17 +1,17 @@
 <?php
 
-$localurl = [
-    'host' => '127.0.0.1',
-    'username' => 'postgres',
-    'password' => '127.0.0.1',
-     'database' => 'mycapstone',
-];
+// $localurl = [
+//     'host' => '127.0.0.1',
+//     'username' => 'postgres',
+//     'password' => '127.0.0.1',
+//      'database' => 'mycapstone',
+// ];
 
-// $url = parse_url(getenv("DATABASE_URL"));
-// $host = $url["host"];
-// $username = $url["user"];
-// $password = $url["pass"];
-// $database = substr($url["path"], 1);
+$url = parse_url(getenv("DATABASE_URL"));
+$host = $url["host"];
+$username = $url["user"];
+$password = $url["pass"];
+$database = substr($url["path"], 1);
 
 return [
 
@@ -70,11 +70,11 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => $localurl['host'],
+            'host' => $host,
             'port' => env('DB_PORT', '5432'),
-            'database' => $localurl['database'],
-            'username' => $localurl['username'],
-            'password' => $localurl['password'],
+            'database' => $database,
+            'username' => $username,
+            'password' => $password,
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
