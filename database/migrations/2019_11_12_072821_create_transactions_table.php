@@ -21,7 +21,11 @@ class CreateTransactionsTable extends Migration
             $table->date('date');
             $table->json('items');
             $table->string('payment_option');
-            $table->integer('total'); 
+            $table->integer('total');
+            $table->integer('food')->default('0');
+            $table->integer('drink')->default('0');
+            $table->integer('food_total')->default('0');
+            $table->integer('drink_total')->default('0');
             $table->nullableTimestamps();
         });
     }

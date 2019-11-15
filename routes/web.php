@@ -66,4 +66,8 @@ Route::prefix('admin')->group(function(){
     //Making Orders
     Route::get('/transactions', 'TransactionController@index')->name('admin.manageTransaction');
     Route::get('/transaction/search', 'TransactionController@search')->name('admin.searchTransaction'); 
+
+    //End of day report
+    Route::get('/reports', 'ReportController@index')->name('admin.reports');
+    Route::get('/reports/search', 'ReportController@search')->name('admin.searchReport');
 });

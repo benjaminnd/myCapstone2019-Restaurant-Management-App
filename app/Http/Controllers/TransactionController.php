@@ -74,7 +74,26 @@ class TransactionController extends Controller
             'payment_option'=>'required',
             'date'=>'required',
         ]);
-
+        
+        $itemJson = json_decode($request->items, true);
+        $totalFood = 0;
+        $totalDrink = 0;
+        $totalFoodPrice = 0;
+        $totalDrinkPrice = 0;
+        foreach($itemJson['items'] as $item){
+            $name = $item['name'];
+            $quantity = $item['quantity'];
+            $instance = DB::table('menu_items')->where('name', $name)->get();
+            $type = $instance[0]->type;
+            $price = $instance[0]->price;
+            if($type == 'food'){
+                $totalFood += 1;
+                $totalFoodPrice += $price * $quantity;
+            }else{
+                $totalDrink += 1;
+                $totalDrinkPrice += $price * $quantity;
+            }
+        }
         $transaction->name = $request->name;
         $transaction->phone = $request->phone;
         $transaction->address = $request->address;
@@ -82,10 +101,12 @@ class TransactionController extends Controller
         $transaction->payment_option = $request->payment_option;
         $transaction->items = $request->items;
         $transaction->total = $request->total;
+        $transaction->food = $totalFood;
+        $transaction->drink = $totalDrink;
 
         if($transaction->save()){
             return redirect()->route('admin.manageTransaction')
-            ->with('success', 'Inventory added successfully');
+            ->with('success', 'Transaction added successfully');
         }
         return back()->withInput()->with('errors' , $validator->messages());
     }
@@ -130,7 +151,26 @@ class TransactionController extends Controller
             'payment_option'=>'required',
             'date'=>'required',
         ]);
-
+        
+        $itemJson = json_decode($request->items, true);
+        $totalFood = 0;
+        $totalDrink = 0;
+        $totalFoodPrice = 0;
+        $totalDrinkPrice = 0;
+        foreach($itemJson['items'] as $item){
+            $name = $item['name'];
+            $quantity = $item['quantity'];
+            $instance = DB::table('menu_items')->where('name', $name)->get();
+            $type = $instance[0]->type;
+            $price = $instance[0]->price;
+            if($type == 'food'){
+                $totalFood += 1;
+                $totalFoodPrice += $price * $quantity;
+            }else{
+                $totalDrink += 1;
+                $totalDrinkPrice += $price * $quantity;
+            }
+        }
         $transactionUpdate = Transaction::where('id', $id)-> update([
             'name' => $request->input('name'),
             'phone' => $request->input('phone'),
@@ -138,7 +178,11 @@ class TransactionController extends Controller
             'date' => $request->input('date'),
             'payment_option'=>$request->input('payment_option'),
             'items'=>$request->input('items'),
-            'total' => $request->input('total')
+            'total' => $request->input('total'),
+            'food' => $totalFood,
+            'drink' => $totalDrink,
+            'food_total' => $totalFoodPrice,
+            'drink_total' => $totalDrinkPrice,
 
         ]);
 

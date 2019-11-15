@@ -9,18 +9,15 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 class ReportController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:web');
-    }
-      /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return view('reports.index');
+        $transactions = DB::table('transactions')->whereDate('date','11/13/2019')->paginate(3);
+        return view('reports.index', ['transactions' => $transactions]);
     }
     /**
      * Show the form for creating a new resource.
@@ -32,16 +29,33 @@ class ReportController extends Controller
     }
 
     public function search(Request $request){
+        $food = 0;
+        $drink = 0;
+        $totalFood = 0;
+        $totalDrink = 0;
+        $cash = 0;
+        $debit = 0;
+        $totalCash = 0;
+        $totalDebit = 0;
+        $exist = null;
         $search = $request->get('search');
-        $inventories = DB::table('inventories')->where('name', 'ilike', '%'.$search.'%')->paginate(3);
-        return view('inventories.index', ['inventories' => $inventories, 'searching' => true]);
+        $transactions = DB::table('transactions')->whereDate('date',$search)->get();
+        foreach($transactions as $transaction) {
+            if($transaction->payment_option == 'cash'){
+                $cash += 1;
+                $totalCash += $transaction->total;
+            }else{
+                $debit += 1;
+                $totalDebit += $transaction->total;
+            }
+            $food += $transaction->food;
+            $drink += $transaction->drink;
+            $totalFood += $transaction->food_total;
+            $totalDrink += $transaction->drink_total;
+            $exist = true;
+        }
+        return view('reports.index', ['exist'=> $exist,'transactions' => $transactions, 'search' => $search, 'food' => $food, 'drink' => $drink, 'total_food' => $totalFood, 'total_drink' => $totalDrink, 'cash' => $cash, 'debit' => $debit, 'total_cash' => $totalCash, 'total_debit' => $totalDebit]);
     }
-
-    // public function searchAjax(Request $request){
-    //     $search = $request->get('search');
-    //     $result = DB::table('inventories')->where('name', 'ilike', '%'.$search.'%')->get();
-    //     return response()->json($result);
-    // }
 
     /**
      * Store a newly created resource in storage.

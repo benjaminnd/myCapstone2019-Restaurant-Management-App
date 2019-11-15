@@ -55,7 +55,7 @@ class MenuItemController extends Controller
     }
 
     public function showPriceAjax(Request $request){
-        $result = MenuItem::all('name', 'price');
+        $result = MenuItem::all('name', 'price', 'type');
         return response()->json($result);
     }
 

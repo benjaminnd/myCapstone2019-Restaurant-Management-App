@@ -159,7 +159,7 @@
 <script>
     jQuery(function($){
         var total = 0;
-        var price;
+        var menu;
         var deleteItemClicked = 0;
         $.ajax({
             url: "{{route('showprice')}}",
@@ -170,8 +170,7 @@
                 // var resp = $.map(data,function(obj){
                 //     console.log(data);
                 //     return (obj.name);
-                price = data;
-                console.log(price[0]);
+                menu = data;
             }
         }); 
         var selectedItem = [];
@@ -231,7 +230,7 @@
         }
 
         function getPriceByName(name) {
-            return price.filter(function(data){
+            return menu.filter(function(data){
                 return data.name == name;
             });
         }

@@ -7,7 +7,7 @@
         <li><a href= "{{ route('admin.manageInventories') }}">Inventory</a></li>
         <li><a href= "{{ route('admin.manageMenu', ['showAll'=>'1', 'showFood' => '0']) }}">Menu</a></li>
         <li><a href= "{{ route('admin.manageTransaction') }}">Manage Transactions</a></li>
-        <li><a href="#">Report</a></li>
+        <li><a href="{{route('admin.reports')}}">Report</a></li>
         </ul>
     </div>
 </nav>
