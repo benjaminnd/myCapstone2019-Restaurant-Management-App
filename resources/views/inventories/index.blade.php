@@ -19,7 +19,7 @@
             @endif
         </div>
         <div class="col-md-5 text-right">
-        <form action="{{route('admin.searchInventories')}}" method="get">
+            <form action="{{route('admin.searchInventories')}}" method="get">
                 <div class="input-group">
                     <input id="search" type="search" name="search" class="form-control">
                     <span class="input-group-btn">
@@ -28,8 +28,8 @@
                     </span>
                 </div>
             </form>
+            @include('back')
         </div>
-        @include('back')
     </div>
     <div class="row">
         <form id="addInventoriesForm" action="{{route('inventories.store')}}" style="width:50%" method="post" {{count($errors) > 0 ? '' : 'hidden'}}>
