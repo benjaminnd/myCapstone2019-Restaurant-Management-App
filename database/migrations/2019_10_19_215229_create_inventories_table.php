@@ -18,7 +18,6 @@ class CreateInventoriesTable extends Migration
             $table->string('name');
             $table->decimal('price', 6, 2);
             $table->integer('quantity');
-            $table->char('unit', 9);
             $table->bigInteger('supplier_id')->unsigned();
             $table->foreign('supplier_id')->references('id')->on('suppliers');
             $table->date('imported_date');
