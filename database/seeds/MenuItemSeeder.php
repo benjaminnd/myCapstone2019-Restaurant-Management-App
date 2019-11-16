@@ -5,7 +5,7 @@ use Illuminate\Database\Seeder;
 class MenuItemSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Database seed for menu item
      *
      * @return void
      */

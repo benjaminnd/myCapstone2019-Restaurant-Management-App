@@ -188,12 +188,16 @@
 
 <script>
     jQuery(function($){
+        //When add button is clicked, show the add menu item form
         $('#addBtn').click(function(){
             $('#addMenuItemsForm').show();
             $(this).hide();
         });
+
+        //When recipe button is clicked
         $('.showRecipe').click(function(){
             var id = $(this).data("id");
+            //Making ajax request to get recipe
             $.ajax({
                 url: "{{route('showrecipe')}}",
                 data: {
@@ -210,10 +214,14 @@
                     console.log('Error');
                 }   
             });
-        })
+        });
+
+        //close recipe modal
         $('.close').click(function(){
             $("#recipeModal").css("display", "none");
         })
+
+        //Search bar autocomplete
         $('#search').autocomplete({
             source:function(request, response){
                 $.ajax({

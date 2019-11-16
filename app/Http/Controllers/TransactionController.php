@@ -27,6 +27,7 @@ class TransactionController extends Controller
 
     /**
      * Search transaction by name
+     * @return \Illuminate\Http\Response
      */
     public function search(Request $request){
         $search = $request->get('search');
@@ -35,6 +36,9 @@ class TransactionController extends Controller
         return view('transactions.index', ['transactions' => $transactions, 'menu_items' => $menuitems, 'searching' => true]);
     }
 
+    /**
+     * Search transaction by name and return json data
+     */
     public function searchAjax(Request $request){
         $search = $request->get('search');
         $result = DB::table('transactions')->where('name', 'ilike', '%'.$search.'%')->get();

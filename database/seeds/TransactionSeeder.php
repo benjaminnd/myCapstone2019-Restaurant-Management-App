@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 class TransactionSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Database seed for Transactions
      *
      * @return void
      */

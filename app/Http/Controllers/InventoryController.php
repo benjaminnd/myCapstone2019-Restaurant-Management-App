@@ -32,15 +32,23 @@ class InventoryController extends Controller
      */
     public function create()
     {
-        //
         return view('inventories.create');
     }
+
+    /**
+     * Search and return all inventories with requested name
+     * @return \Illuminate\Http\Response
+     */
 
     public function search(Request $request){
         $search = $request->get('search');
         $inventories = DB::table('inventories')->where('name', 'ilike', '%'.$search.'%')->orderBy('name')->paginate(3);
         return view('inventories.index', ['inventories' => $inventories, 'searching' => true]);
     }
+
+    /**
+     * Search and return json data of inventories with requested name
+     */
 
     public function searchAjax(Request $request){
         $search = $request->get('search');
@@ -104,23 +112,6 @@ class InventoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //validate request input, ignore current id
-        // Validator::make($data, [
-        //     'name' => ['required'],
-        //     'email' => ['required',
-        //                 Rule::unique('Inventorys')->ignore($id),
-        //                 Rule::unique('admins')],
-        //     'password'=> ['required',
-        //                   'string',
-        //                   'min:5'
-        //                 ]
-        // ]);
-        // $this->validate($request,[
-        //     'name'=>'required',
-        //     'email'=>'required|unique:Inventorys|unique:admins',
-        //     'password'=>'required|string|min:5',
-        // ]);
-        // save data 
         $inventoryUpdate = Inventory::where('id', $id)-> update([
             'name' => $request->input('name'),
             'price' => $request->input('price'),

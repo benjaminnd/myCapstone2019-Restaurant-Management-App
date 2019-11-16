@@ -28,6 +28,9 @@ class ReportController extends Controller
     {
     }
 
+    /**
+     * Retrieve information using requested date
+     */
     public function search(Request $request){
         $food = 0;
         $drink = 0;

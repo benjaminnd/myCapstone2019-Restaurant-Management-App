@@ -5,7 +5,7 @@ use Illuminate\Database\Seeder;
 class InventorySeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Database seeds for Inventory
      *
      * @return void
      */

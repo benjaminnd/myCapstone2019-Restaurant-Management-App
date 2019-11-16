@@ -70,18 +70,18 @@
 
 <script>
     jQuery(function($){
+        //Set date picker value to today
         Date.prototype.toDateInputValue = (function() {
             var local = new Date(this);
             local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
             return local.toJSON().slice(0,10);
         });
+        $('#search').val(new Date().toDateInputValue());
 
+        //Date input change event
         $('#search').on('change', function(){
             $('#filterForm').submit();
         })
-        // setTimeout(function() {
-        //     $('#successMessage').fadeOut('fast');
-        // }, 1500); 
 
     });
 </script>

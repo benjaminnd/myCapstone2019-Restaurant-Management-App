@@ -158,28 +158,28 @@
 
 <script>
     jQuery(function($){
-        var total = 0;
-        var menu;
-        var deleteItemClicked = 0;
+        var total = 0; //total amount of the transaction
+        var menu; //menu items to be retrieved from ajax
+        var deleteItemClicked = 0; //tracking how many times delete item button is clicked
+       
+        //ajax call to retrieve all menu items
         $.ajax({
             url: "{{route('showprice')}}",
             data: {
             },
             dataType: "json",
             success: function(data){
-                // var resp = $.map(data,function(obj){
-                //     console.log(data);
-                //     return (obj.name);
                 menu = data;
             }
         }); 
-        var selectedItem = [];
-        var quantities = [];
+        var selectedItem = []; //array to hold selected item
+        var quantities = []; //related array that holds quantity of the selected items
         $('#addTransactionSubmit').click(function(event){
-            var jsonItems = {"items": []};
+            var jsonItems = {"items": []}; //json object to hold selected items and quantities
             //jsonItems.items.push({"name": "pho", "quantity": 5});
             var table = document.getElementById('transactionItems');
             var rowLength = table.rows.length;
+            //Getting items in the table and push to jsonItems
             for(var i = 1; i < rowLength; i++){
                 var row = table.rows[i];
                 var item = {"name" : row.cells[0].innerHTML, "quantity" : row.cells[1].innerHTML};
@@ -192,20 +192,22 @@
 
         });
 
+        //When add button is clicked
         $('#addItemBtn').click(function(){
             $('#tableContainer').show();
             var selectedItem = $('#addItem').children("option:selected").val();
             var qTy = $("#quantity").val()
             var newRow = '<tr><td class="itemName" colspan="4">' + selectedItem + '</td>' + '<td class="quantity">' + qTy + '</td><td><button class="btn btn-link deleteItem" title="delete"><i class="material-icons text-danger">delete</i></button></td></tr>';
             $("#transactionItems tbody").append(newRow);
+            //Call addTotal to change the total amount
             addTotal(selectedItem, qTy);
             event.preventDefault();
         })
 
-
+        //When item is deleted from the table
         $('#transactionItems').on('click', '.deleteItem', function(event){
-             var qTy = $(this).parent().prev().html();
-             var selectedItem = $(this).parent().prev().prev().html();
+            var qTy = $(this).parent().prev().html(); //getting the quantity from table cell value
+            var selectedItem = $(this).parent().prev().prev().html();
             lessTotal(selectedItem, qTy);
             $(this).parent().parent().hide();
             event.preventDefault();
@@ -217,18 +219,22 @@
             }
 
         });
+
+        //function to add new item value to transaction total amount
         function addTotal(item, quantity){
             var newValue = getPriceByName(item)[0].price * quantity;
             total += newValue;
             $("#addTransactionForm input[id=total]").val(total);
         }
 
+        //Subtract from total amount when item is deleted
         function lessTotal(item, quantity){
             var newValue = getPriceByName(item)[0].price * quantity;
             total -= newValue
             $("#addTransactionForm input[id=total]").val(total);
         }
 
+        //function to find the menu item in the menu list
         function getPriceByName(name) {
             return menu.filter(function(data){
                 return data.name == name;
@@ -239,7 +245,7 @@
             $(this).hide();
         });
 
-
+        //search bar autocomplete
         $('#search').autocomplete({
             source:function(request, response){
                 $.ajax({

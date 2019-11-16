@@ -5,7 +5,7 @@ use Illuminate\Database\Seeder;
 class SupplierSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Database seeds for Supplier
      *
      * @return void
      */

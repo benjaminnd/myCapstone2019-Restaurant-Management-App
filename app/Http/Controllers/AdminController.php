@@ -28,6 +28,10 @@ class AdminController extends Controller
         return view('admin');
     }
 
+    /**
+     * Show the user management interface for admin
+     * @return \Illuminate\Http\Response
+     */
     public function manageUsers(){
         $users = User::all(); 
         return view('admin-register')->with('users', $users);

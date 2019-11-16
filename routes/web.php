@@ -71,3 +71,4 @@ Route::prefix('admin')->group(function(){
     Route::get('/reports', 'ReportController@index')->name('admin.reports');
     Route::get('/reports/search', 'ReportController@search')->name('admin.searchReport');
 });
+

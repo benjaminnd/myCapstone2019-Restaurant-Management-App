@@ -30,30 +30,47 @@ class MenuItemController extends Controller
         }
     }
 
+    /**
+     * Show menu items according to the filter selection
+     * @return \Illuminate\Http\Response
+     */
     public function filter($tag, $showAll, $showFood)
     {
             $menuItemList = DB::table('menu_items')->where('tags', 'ilike', '%'.$tag.'%' )->orderBy('name')->paginate(5);
             return view('menu.index', ['menu_items' => $menuItemList,'showAll'=>$showAll,'showFood' => $showFood, 'searching' => 1]);
     }
 
+    /**
+     * Search for menu items using requested name
+     * @return \Illuminate\Http\Response
+     */
     public function search(Request $request){
         $search = $request->get('search');
         $result = DB::table('menu_items')->where('name', 'ilike', '%'.$search.'%')->orderBy('name')->paginate(3);
         return view('menu.index', ['menu_items' => $result, 'showAll'=>'1', 'showFood' => '0', 'searching' => true]);
     }
 
+    /**
+     * Search and return json data of menu items using requested name
+     */
     public function searchAjax(Request $request){
         $search = $request->get('search');
         $result = DB::table('menu_items')->where('name', 'ilike', '%'.$search.'%')->orderBy('name')->get();
         return response()->json($result);
     }
 
+    /**
+     * Search for recipe and show in the modal
+     */
     public function showRecipeAjax(Request $request){
         $search = $request->get('recipe_id');
         $result = DB::table('recipes')->where('id', $search)->get();
         return response()->json($result);
     }
 
+    /**
+     * Return json data of menu items with name, price and type
+     */
     public function showPriceAjax(Request $request){
         $result = MenuItem::all('name', 'price', 'type');
         return response()->json($result);

@@ -62,7 +62,7 @@
             </div>
         </form>
     </div>
-    <div class="row">
+    < div class="row">
         <div class="table-responsive">
             <div class="col-md-2 col-md-offset-8 text-right">
                 @if(Auth::guard('admin')->check())
@@ -106,16 +106,18 @@
             @endif
             {{$inventories->links()}}
         </div>
-    </div>
+    </>
 </div>
 
 <script>
     jQuery(function($){
+        //When addBtn is clicked
         $('#addBtn').click(function(){
             $('#addInventoriesForm').show();
             $(this).hide();
         });
 
+        //Search bar autocomplete
         $('#search').autocomplete({
             source:function(request, response){
                 $.ajax({

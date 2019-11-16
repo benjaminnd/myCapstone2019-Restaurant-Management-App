@@ -23,7 +23,7 @@ class UserController extends Controller
     {
         //
         $usersList = DB::table('users')->orderBy('name')->paginate(5);
-        return view('users', ['users' => $usersList]);
+        return view('users.index', ['users' => $usersList]);
     }
     /**
      * Show the form for creating a new resource.
@@ -32,8 +32,6 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
-        return view('users.create');
     }
 
     public function search(Request $request){
@@ -79,9 +77,6 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
-        $singleUser = User::find($user->id);
-        return view('users.show', ['singleUserData' => $singleUser]);
     }
     /**
      * Show the form for editing the specified resource.
@@ -103,23 +98,6 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //validate request input, ignore current id
-        // Validator::make($data, [
-        //     'name' => ['required'],
-        //     'email' => ['required',
-        //                 Rule::unique('users')->ignore($id),
-        //                 Rule::unique('admins')],
-        //     'password'=> ['required',
-        //                   'string',
-        //                   'min:5'
-        //                 ]
-        // ]);
-        // $this->validate($request,[
-        //     'name'=>'required',
-        //     'email'=>'required|unique:users|unique:admins',
-        //     'password'=>'required|string|min:5',
-        // ]);
-        // save data 
         $userUpdate = User::where('id', $id)-> update([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
