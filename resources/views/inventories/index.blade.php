@@ -28,8 +28,8 @@
                     </span>
                 </div>
             </form>
-            @include('back')
         </div>
+        @include('back')
     </div>
     <div class="row">
         <form id="addInventoriesForm" action="{{route('inventories.store')}}" style="width:50%" method="post" {{count($errors) > 0 ? '' : 'hidden'}}>
@@ -62,7 +62,7 @@
             </div>
         </form>
     </div>
-    < div class="row">
+    <div class="row">
         <div class="table-responsive">
             <div class="col-md-2 col-md-offset-8 text-right">
                 @if(Auth::guard('admin')->check())
@@ -106,7 +106,7 @@
             @endif
             {{$inventories->links()}}
         </div>
-    </>
+    </div>
 </div>
 
 <script>
