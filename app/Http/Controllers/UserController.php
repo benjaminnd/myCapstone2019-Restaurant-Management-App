@@ -37,7 +37,7 @@ class UserController extends Controller
     public function search(Request $request){
         $search = $request->get('search');
         $users = DB::table('users')->where('name', 'ilike', '%'.$search.'%')->orderBy('name')->paginate(3);
-        return view('users', ['users' => $users, 'searching' => true]);
+        return view('users.index', ['users' => $users, 'searching' => true]);
     }
 
     public function searchAjax(Request $request){
