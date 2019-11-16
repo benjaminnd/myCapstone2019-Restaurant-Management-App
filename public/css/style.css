@@ -3,6 +3,10 @@
     font-size: 15px;    
  }
 
+ .btn-link {
+   margin-bottom: 15px;
+ }
+
  .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */

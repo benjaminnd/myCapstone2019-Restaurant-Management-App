@@ -107,6 +107,8 @@ class TransactionController extends Controller
         $transaction->total = $request->total;
         $transaction->food = $totalFood;
         $transaction->drink = $totalDrink;
+        $transaction->food_total = $totalFoodPrice;
+        $transaction->drink_total = $totalDrinkPrice;
 
         if($transaction->save()){
             return redirect()->route('admin.manageTransaction')
