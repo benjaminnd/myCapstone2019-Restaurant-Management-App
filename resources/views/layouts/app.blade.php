@@ -45,7 +45,11 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        <li><a href= "{{ route('home') }}">Dashboard</a></li>
+                        <!-- <li><a href="# }}">View All Tech</a></li> -->
+                        <li><a href= "{{ route('addTransactions') }}">Add Transactions</a></li>
+                        <li><a href= "{{ route('viewInventories') }}">Inventory</a></li>
+                        <li><a href= "{{ route('viewMenu', ['showAll'=>'1', 'showFood' => '0']) }}">Menu</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -90,7 +94,6 @@
             </div>
         </nav>
         @if(!Auth::guest())
-            @include('navbar')
         @endif
         <div class="container">
             <div class="jumbotron jumbotron-fluid">

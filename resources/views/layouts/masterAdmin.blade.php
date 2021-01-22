@@ -45,7 +45,13 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        <li><a href= "{{ route('admin.dashboard') }}">Dashboard</a></li>
+                        <!-- <li><a href="# }}">View All Tech</a></li> -->
+                        <li><a href= "{{ route('admin.manageUsers') }}">Manage Users</a></li>
+                        <li><a href= "{{ route('admin.manageInventories') }}">Inventory</a></li>
+                        <li><a href= "{{ route('admin.manageMenu', ['showAll'=>'1', 'showFood' => '0']) }}">Menu</a></li>
+                        <li><a href= "{{ route('admin.manageTransaction') }}">Manage Transactions</a></li>
+                        <li><a href="{{route('admin.reports')}}">Report</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -73,7 +79,6 @@
                 </div>
             </div>
         </nav>
-        @include('admin-navbar')
         <div class="container">
             <div class="jumbotron jumbotron-fluid">
                 @yield('content')
