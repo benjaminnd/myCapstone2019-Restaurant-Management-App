@@ -3238,11 +3238,13 @@ th {
   overflow-x: auto;
 }
 
-@media screen and (max-width: 767px) {
+
+
+@media screen and (max-width: 850px) {
   .table-responsive {
     width: 100%;
     margin-bottom: 16.5px;
-    overflow-y: hidden;
+    overflow-y: scroll;
     -ms-overflow-style: -ms-autohiding-scrollbar;
     border: 1px solid #ddd;
   }
@@ -3257,7 +3259,7 @@ th {
   .table-responsive > .table > tbody > tr > td,
   .table-responsive > .table > tfoot > tr > th,
   .table-responsive > .table > tfoot > tr > td {
-    white-space: nowrap;
+    padding: 2px;
   }
 
   .table-responsive > .table-bordered {
@@ -5249,7 +5251,6 @@ tbody.collapse.in {
 .navbar {
   position: relative;
   min-height: 50px;
-  margin-bottom: 22px;
   border: 1px solid transparent;
 }
 

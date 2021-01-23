@@ -7,15 +7,15 @@ $localurl = [
      'database' => 'mycapstone',
 ];
 
-$url = parse_url(getenv("DATABASE_URL"));
-$host = $url["host"];
-$username = $url["user"];
-$password = $url["pass"];
-$database = substr($url["path"], 1);
-// $host = $localurl["host"];
-// $username = $localurl["username"];
-// $password = $localurl["password"];
-// $database = $localurl["database"];
+// $url = parse_url(getenv("DATABASE_URL"));
+// $host = $url["host"];
+// $username = $url["user"];
+// $password = $url["pass"];
+// $database = substr($url["path"], 1);
+$host = $localurl["host"];
+$username = $localurl["username"];
+$password = $localurl["password"];
+$database = $localurl["database"];
     
 
 return [
